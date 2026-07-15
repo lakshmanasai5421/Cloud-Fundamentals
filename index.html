@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud Computing Fundamentals — Technical Reference</title>
+<meta name="description" content="A premium, provider-neutral reference to the fundamentals of cloud computing: 18 domains and 169+ concepts, each clearly defined.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#080b14; --slate:#0e1626; --slate-2:#141d30;
+  --paper:#f6f7fb; --surface:#ffffff;
+  --line:#e4e7f0; --line-soft:#eef0f6;
+  --line-dark:rgba(255,255,255,.09); --line-dark-2:rgba(255,255,255,.14);
+  --text:#0d1220; --muted:#565f78; --muted-2:#767e96;
+  --on-dark:#eef1f8; --on-dark-muted:#9aa3bd; --on-dark-faint:#6b7490;
+  --accent:#3d5afe; --accent-soft:#5f76ff; --accent-ink:#2a3fd0;
+  --teal:#22d3c5; --teal-soft:#5ee7dc;
+  --wrap:1200px; --rail:250px;
+  --r-sm:8px; --r-md:14px; --r-lg:22px;
+  --fs-display:"Space Grotesk", system-ui, sans-serif;
+  --fs-body:"IBM Plex Sans", system-ui, sans-serif;
+  --fs-mono:"IBM Plex Mono", ui-monospace, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--text);
+  font-family:var(--fs-body); font-size:16.5px; line-height:1.6;
+  font-weight:400; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:clip;
+}
+a{color:inherit; text-decoration:none}
+h1,h2,h3{margin:0; font-family:var(--fs-display); font-weight:600; letter-spacing:-.02em; line-height:1.05}
+:focus-visible{outline:2.5px solid var(--accent); outline-offset:3px; border-radius:4px}
+
+/* ---------- utility ---------- */
+.wrap{max-width:var(--wrap); margin-inline:auto; padding-inline:28px}
+.eyebrow{font-family:var(--fs-mono); font-size:.72rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin:0}
+.eyebrow.on-dark{color:var(--teal-soft)}
+.mono{font-family:var(--fs-mono)}
+
+/* ---------- progress + nav ---------- */
+.progress{position:fixed; top:0; left:0; height:2px; width:0%; background:linear-gradient(90deg,var(--accent),var(--teal)); z-index:120; transition:width .08s linear}
+.nav{position:fixed; top:0; left:0; right:0; z-index:110; height:64px;
+  display:flex; align-items:center; background:rgba(8,11,20,.72); backdrop-filter:blur(14px) saturate(1.4);
+  border-bottom:1px solid var(--line-dark); transition:background .3s, border-color .3s}
+.nav__row{max-width:var(--wrap); margin-inline:auto; padding-inline:28px; width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px}
+.brand{display:flex; align-items:center; gap:11px; color:var(--on-dark)}
+.brand__mark{width:26px; height:26px; flex:none}
+.brand__name{font-family:var(--fs-display); font-weight:600; font-size:.98rem; letter-spacing:-.01em}
+.brand__name b{color:var(--teal-soft); font-weight:600}
+.nav__meta{display:flex; align-items:center; gap:22px}
+.nav__stat{font-family:var(--fs-mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--on-dark-muted)}
+.nav__stat b{color:var(--on-dark); font-weight:500}
+.nav__cta{font-family:var(--fs-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  background:var(--teal); padding:8px 15px; border-radius:100px; font-weight:600; transition:transform .2s, background .2s}
+.nav__cta:hover{background:var(--teal-soft); transform:translateY(-1px)}
+@media(max-width:760px){ .nav__stat{display:none} }
+
+/* ---------- hero ---------- */
+.hero{position:relative; background:var(--ink); color:var(--on-dark); padding:150px 0 90px; overflow:hidden}
+.hero::before{content:""; position:absolute; inset:0;
+  background-image:linear-gradient(var(--line-dark) 1px,transparent 1px),linear-gradient(90deg,var(--line-dark) 1px,transparent 1px);
+  background-size:64px 64px; mask-image:radial-gradient(120% 90% at 20% 0%,#000 30%,transparent 78%); opacity:.55}
+.hero::after{content:""; position:absolute; width:720px; height:720px; right:-160px; top:-220px; border-radius:50%;
+  background:radial-gradient(circle,rgba(61,90,254,.28),transparent 62%); filter:blur(8px); pointer-events:none}
+.hero__grid{position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:52px; align-items:center}
+.hero__copy{max-width:620px}
+.hero h1{font-size:clamp(2.7rem,6vw,4.5rem); letter-spacing:-.035em; margin:22px 0 0}
+.hero h1 .accent{background:linear-gradient(120deg,var(--accent-soft),var(--teal-soft)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero__deck{margin:26px 0 0; font-size:1.18rem; line-height:1.6; color:var(--on-dark-muted); max-width:540px}
+.hero__meta{display:flex; flex-wrap:wrap; gap:10px 12px; margin-top:34px}
+.chip{display:inline-flex; align-items:center; gap:8px; font-family:var(--fs-mono); font-size:.74rem; letter-spacing:.08em;
+  color:var(--on-dark); border:1px solid var(--line-dark-2); background:rgba(255,255,255,.03); padding:7px 13px; border-radius:100px}
+.chip .dot{width:6px; height:6px; border-radius:50%; background:var(--teal)}
+.chip b{color:var(--teal-soft); font-weight:600}
+
+/* isometric signature stack */
+.scene{position:relative; height:440px; display:flex; align-items:center; justify-content:center; perspective:1500px}
+.stack{position:relative; width:300px; height:300px; transform-style:preserve-3d;
+  transform:rotateX(56deg) rotateZ(-42deg); animation:floaty 9s ease-in-out infinite}
+.plane{position:absolute; inset:0; margin:auto; width:300px; height:210px; border-radius:16px;
+  border:1px solid var(--line-dark-2); box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
+  display:flex; align-items:flex-start; justify-content:space-between; padding:16px 18px;
+  background:linear-gradient(135deg,rgba(24,32,52,.96),rgba(14,20,34,.96))}
+.plane .p-label{font-family:var(--fs-mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--on-dark)}
+.plane .p-tag{font-family:var(--fs-mono); font-size:.62rem; letter-spacing:.1em; color:var(--on-dark-faint)}
+.plane .p-nodes{position:absolute; left:18px; bottom:16px; display:flex; gap:7px}
+.plane .p-nodes i{width:8px; height:8px; border-radius:2px; background:var(--on-dark-faint); display:block}
+.plane--4{transform:translateZ(0px); background:linear-gradient(135deg,rgba(61,90,254,.34),rgba(20,28,48,.96)); border-color:rgba(95,118,255,.5)}
+.plane--4 .p-nodes i{background:var(--accent-soft)}
+.plane--3{transform:translateZ(46px)}
+.plane--2{transform:translateZ(92px)}
+.plane--1{transform:translateZ(138px); border-color:rgba(94,231,220,.45)}
+.plane--1 .p-nodes i:first-child{background:var(--teal)}
+.scene__glow{position:absolute; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle,rgba(34,211,197,.16),transparent 60%); filter:blur(6px)}
+@keyframes floaty{0%,100%{transform:rotateX(56deg) rotateZ(-42deg) translateZ(0)}50%{transform:rotateX(56deg) rotateZ(-42deg) translateZ(-26px)}}
+
+/* ---------- directory ---------- */
+.section-pad{padding:88px 0}
+.directory{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.dir__head{max-width:640px; margin-bottom:40px}
+.dir__head h2{font-size:clamp(1.7rem,3.4vw,2.4rem); margin:14px 0 0; color:var(--text)}
+.dir__head p{margin:14px 0 0; color:var(--muted); font-size:1.05rem}
+.dir__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--line)}
+.dcard{background:var(--surface); padding:26px 24px 30px; position:relative; display:flex; flex-direction:column; gap:12px; min-height:186px;
+  transition:background .25s; outline-offset:-2px}
+.dcard:hover{background:#fbfcfe}
+.dcard__num{font-family:var(--fs-mono); font-size:.82rem; font-weight:600; letter-spacing:.08em; color:var(--accent)}
+.dcard h3{font-size:1.16rem; color:var(--text); letter-spacing:-.015em; line-height:1.18}
+.dcard p{margin:0; font-size:.92rem; color:var(--muted); line-height:1.5}
+.dcard__go{margin-top:auto; display:inline-flex; align-items:center; gap:7px; font-family:var(--fs-mono); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); transition:color .2s, gap .2s}
+.dcard:hover .dcard__go{color:var(--accent); gap:11px}
+.dcard__go svg{width:14px; height:14px}
+.dcard::after{content:""; position:absolute; left:0; top:0; width:100%; height:3px; background:linear-gradient(90deg,var(--accent),var(--teal)); transform:scaleX(0); transform-origin:left; transition:transform .3s}
+.dcard:hover::after{transform:scaleX(1)}
+
+/* ---------- content + rail ---------- */
+.content{padding:80px 0 40px}
+.content__grid{display:grid; grid-template-columns:var(--rail) 1fr; gap:56px; align-items:start}
+.rail{position:sticky; top:96px; align-self:start}
+.rail__title{font-family:var(--fs-mono); font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted-2); padding:0 0 14px; border-bottom:1px solid var(--line); margin-bottom:8px}
+.rail__list{list-style:none; margin:0; padding:0; max-height:calc(100vh - 160px); overflow-y:auto; scrollbar-width:thin}
+.rail__list a{display:flex; gap:10px; align-items:baseline; padding:7px 10px; border-radius:8px; font-size:.86rem; color:var(--muted); line-height:1.3; border-left:2px solid transparent; transition:color .2s, background .2s, border-color .2s}
+.rail__list a .n{font-family:var(--fs-mono); font-size:.72rem; color:var(--muted-2); flex:none}
+.rail__list a:hover{color:var(--text); background:#fff}
+.rail__list a.active{color:var(--accent); background:#eef1ff; border-left-color:var(--accent); font-weight:500}
+.rail__list a.active .n{color:var(--accent)}
+
+/* domain sections */
+.domain{padding-top:26px; margin-bottom:8px; scroll-margin-top:88px}
+.domain + .domain{margin-top:64px; border-top:1px solid var(--line-soft); padding-top:56px}
+.domain__head{margin-bottom:30px}
+.domain__num{font-family:var(--fs-mono); font-size:.8rem; font-weight:600; letter-spacing:.14em; color:var(--accent)}
+.domain__head h2{font-size:clamp(1.55rem,3vw,2.15rem); color:var(--text); margin:12px 0 0; max-width:16ch}
+.domain__head p{margin:12px 0 0; color:var(--muted); font-size:1.04rem; max-width:60ch}
+
+/* spec rows */
+.specs{border-top:1px solid var(--line)}
+.spec{display:grid; grid-template-columns:minmax(190px,258px) 1fr; gap:32px; padding:20px 4px 20px 0; border-bottom:1px solid var(--line-soft); position:relative; transition:background .2s}
+.spec:hover{background:#fbfcff}
+.spec::before{content:""; position:absolute; left:-16px; top:26px; width:5px; height:5px; border-radius:50%; background:var(--line); transition:background .2s, transform .2s}
+.spec:hover::before{background:var(--accent); transform:scale(1.5)}
+.spec__term{font-family:var(--fs-display); font-weight:500; font-size:1.03rem; color:var(--text); letter-spacing:-.01em; line-height:1.35}
+.spec__desc{color:var(--muted); font-size:.98rem; line-height:1.62; max-width:64ch}
+.spec__desc code, .plane code{font-family:var(--fs-mono)}
+
+/* ---------- glossary ---------- */
+.glossary{background:var(--slate); color:var(--on-dark); position:relative; overflow:hidden}
+.glossary::before{content:""; position:absolute; inset:0; background-image:radial-gradient(var(--line-dark) 1px,transparent 1px); background-size:26px 26px; opacity:.5}
+.gloss__head{position:relative; z-index:2; max-width:600px; margin-bottom:40px}
+.gloss__head h2{font-size:clamp(1.7rem,3.4vw,2.4rem); margin:14px 0 0; color:#fff}
+.gloss__head p{margin:12px 0 0; color:var(--on-dark-muted)}
+.gloss__grid{position:relative; z-index:2; display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+.gterm{border:1px solid var(--line-dark); background:rgba(255,255,255,.02); border-radius:var(--r-md); padding:16px 16px 15px; transition:border-color .25s, transform .25s, background .25s}
+.gterm:hover{border-color:rgba(94,231,220,.5); transform:translateY(-2px); background:rgba(34,211,197,.05)}
+.gterm dt{font-family:var(--fs-mono); font-weight:600; font-size:.98rem; color:var(--teal-soft); letter-spacing:.02em}
+.gterm dd{margin:6px 0 0; font-size:.82rem; color:var(--on-dark-muted); line-height:1.4}
+
+/* ---------- footer ---------- */
+.footer{background:var(--ink); color:var(--on-dark-muted); padding:64px 0 40px; border-top:1px solid var(--line-dark)}
+.footer__grid{display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; align-items:flex-start}
+.footer .brand{margin-bottom:16px}
+.footer__note{max-width:420px; font-size:.9rem; line-height:1.6; color:var(--on-dark-faint)}
+.footer__side{text-align:right; font-family:var(--fs-mono); font-size:.74rem; letter-spacing:.1em; color:var(--on-dark-faint); line-height:2}
+.footer__rule{height:1px; background:var(--line-dark); margin:40px 0 22px}
+.footer__base{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:var(--fs-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--on-dark-faint)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1; transform:none}
+
+/* ---------- responsive ---------- */
+@media(max-width:1024px){
+  .content__grid{grid-template-columns:1fr; gap:0}
+  .rail{display:none}
+  .hero__grid{grid-template-columns:1fr; gap:20px}
+  .scene{height:380px; margin-top:8px}
+  .dir__grid{grid-template-columns:repeat(2,1fr)}
+  .gloss__grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:640px){
+  .wrap{padding-inline:20px}
+  .nav__row{padding-inline:20px}
+  .hero{padding:120px 0 64px}
+  .section-pad{padding:60px 0}
+  .content{padding:52px 0 20px}
+  .spec{grid-template-columns:1fr; gap:6px; padding-left:0}
+  .spec::before{display:none}
+  .spec__term{font-size:1.06rem}
+  .dir__grid{grid-template-columns:1fr}
+  .gloss__grid{grid-template-columns:repeat(2,1fr)}
+  .footer__side{text-align:left}
+  .scene{transform:scale(.82)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .stack{animation:none}
+  .reveal{opacity:1; transform:none; transition:none}
+  *{transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+
+<header class="nav">
+  <div class="nav__row">
+    <a class="brand" href="#top" aria-label="Cloud Fundamentals home">
+      <svg class="brand__mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="6" y="6" width="20" height="14" rx="4" fill="url(#bg1)" opacity="0.9"/><rect x="3" y="11" width="20" height="14" rx="4" fill="none" stroke="#5ee7dc" stroke-width="1.5"/><circle cx="9" cy="18" r="1.4" fill="#5ee7dc"/><circle cx="13" cy="18" r="1.4" fill="#5f76ff"/><defs><linearGradient id="bg1" x1="6" y1="6" x2="26" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#5f76ff"/><stop offset="1" stop-color="#3d5afe"/></linearGradient></defs></svg>
+      <span class="brand__name">CLOUD<b>//</b>FUNDAMENTALS</span>
+    </a>
+    <nav class="nav__meta">
+      <span class="nav__stat"><b>18</b> Domains</span>
+      <span class="nav__stat"><b>169+</b> Concepts</span>
+      <a class="nav__cta" href="#directory">Browse index</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow on-dark">Technical Reference &middot; 2026 Edition</p>
+        <h1>The complete field guide to <span class="accent">cloud computing.</span></h1>
+        <p class="hero__deck">Eighteen domains, from the layers of abstraction to security, economics, and migration — every core concept defined in plain language, provider-neutral.</p>
+        <div class="hero__meta">
+          <span class="chip"><span class="dot"></span><b>18</b>&nbsp;domains</span>
+          <span class="chip"><span class="dot"></span><b>169+</b>&nbsp;concepts</span>
+          <span class="chip"><span class="dot"></span>Vendor&nbsp;neutral</span>
+        </div>
+      </div>
+      <div class="scene" aria-hidden="true">
+        <div class="scene__glow"></div>
+        <div class="stack">
+          <div class="plane plane--1"><span class="p-label">SaaS</span><span class="p-tag">software</span><span class="p-nodes"><i></i><i></i><i></i></span></div>
+          <div class="plane plane--2"><span class="p-label">PaaS</span><span class="p-tag">platform</span><span class="p-nodes"><i></i><i></i><i></i></span></div>
+          <div class="plane plane--3"><span class="p-label">IaaS</span><span class="p-tag">infrastructure</span><span class="p-nodes"><i></i><i></i><i></i></span></div>
+          <div class="plane plane--4"><span class="p-label">Hardware</span><span class="p-tag">physical</span><span class="p-nodes"><i></i><i></i><i></i></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIRECTORY -->
+  <section class="directory section-pad" id="directory">
+    <div class="wrap">
+      <div class="dir__head reveal">
+        <p class="eyebrow">The Index</p>
+        <h2>Eighteen domains, one reference.</h2>
+        <p>Start anywhere. Each domain collects the concepts you need, defined for study and revision.</p>
+      </div>
+      <div class="dir__grid reveal">
+        <a class="dcard" href="#domain-1"><span class="dcard__num">01</span><h3>Introduction to Cloud Computing</h3><p>What cloud computing is, where it came from, and why it matters.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-2"><span class="dcard__num">02</span><h3>Enabling Technologies</h3><p>Virtualization, containers, and the distributed systems underneath.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-3"><span class="dcard__num">03</span><h3>Service Models</h3><p>IaaS, PaaS, SaaS, serverless, and who is responsible for what.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-4"><span class="dcard__num">04</span><h3>Deployment Models</h3><p>Public, private, hybrid, community, and multi-cloud.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-5"><span class="dcard__num">05</span><h3>Cloud Architecture</h3><p>Regions, availability zones, actors, and design principles.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-6"><span class="dcard__num">06</span><h3>Compute</h3><p>Instances, images, scaling strategies, and serverless execution.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-7"><span class="dcard__num">07</span><h3>Storage</h3><p>Object, block, and file storage — plus durability and consistency.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-8"><span class="dcard__num">08</span><h3>Networking</h3><p>Virtual networks, load balancers, DNS, CDNs, and egress cost.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-9"><span class="dcard__num">09</span><h3>Databases in the Cloud</h3><p>Relational, the four NoSQL families, warehouses, and lakes.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-10"><span class="dcard__num">10</span><h3>Cloud Security</h3><p>Identity, encryption, common threats, and compliance frameworks.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-11"><span class="dcard__num">11</span><h3>Virtualization &amp; Resource Management</h3><p>Multi-tenancy, provisioning, scheduling, and quality of service.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-12"><span class="dcard__num">12</span><h3>Reliability &amp; Availability</h3><p>High availability, disaster recovery, RTO/RPO, and SLAs.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-13"><span class="dcard__num">13</span><h3>Cloud Economics</h3><p>Pricing models, total cost of ownership, and FinOps.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-14"><span class="dcard__num">14</span><h3>Cloud Management &amp; Operations</h3><p>Observability, infrastructure as code, and CI/CD.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-15"><span class="dcard__num">15</span><h3>Migration to the Cloud</h3><p>Assessment, the six R's, and avoiding vendor lock-in.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-16"><span class="dcard__num">16</span><h3>Major Cloud Providers</h3><p>AWS, Azure, GCP, and how their terminology maps.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-17"><span class="dcard__num">17</span><h3>Emerging &amp; Advanced Topics</h3><p>Edge, cloud-native, service mesh, AI/ML, and confidential computing.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+<a class="dcard" href="#domain-18"><span class="dcard__num">18</span><h3>Legal, Ethical &amp; Standards</h3><p>Privacy law, contracts, certification, and open standards.</p><span class="dcard__go">Open <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="content">
+    <div class="wrap content__grid">
+      <aside class="rail" aria-label="Domain navigation">
+        <p class="rail__title">Domains</p>
+        <ul class="rail__list">
+          <li><a href="#domain-1"><span class="n">01</span><span>Introduction to Cloud Computing</span></a></li>
+<li><a href="#domain-2"><span class="n">02</span><span>Enabling Technologies</span></a></li>
+<li><a href="#domain-3"><span class="n">03</span><span>Service Models</span></a></li>
+<li><a href="#domain-4"><span class="n">04</span><span>Deployment Models</span></a></li>
+<li><a href="#domain-5"><span class="n">05</span><span>Cloud Architecture</span></a></li>
+<li><a href="#domain-6"><span class="n">06</span><span>Compute</span></a></li>
+<li><a href="#domain-7"><span class="n">07</span><span>Storage</span></a></li>
+<li><a href="#domain-8"><span class="n">08</span><span>Networking</span></a></li>
+<li><a href="#domain-9"><span class="n">09</span><span>Databases in the Cloud</span></a></li>
+<li><a href="#domain-10"><span class="n">10</span><span>Cloud Security</span></a></li>
+<li><a href="#domain-11"><span class="n">11</span><span>Virtualization &amp; Resource Management</span></a></li>
+<li><a href="#domain-12"><span class="n">12</span><span>Reliability &amp; Availability</span></a></li>
+<li><a href="#domain-13"><span class="n">13</span><span>Cloud Economics</span></a></li>
+<li><a href="#domain-14"><span class="n">14</span><span>Cloud Management &amp; Operations</span></a></li>
+<li><a href="#domain-15"><span class="n">15</span><span>Migration to the Cloud</span></a></li>
+<li><a href="#domain-16"><span class="n">16</span><span>Major Cloud Providers</span></a></li>
+<li><a href="#domain-17"><span class="n">17</span><span>Emerging &amp; Advanced Topics</span></a></li>
+<li><a href="#domain-18"><span class="n">18</span><span>Legal, Ethical &amp; Standards</span></a></li>
+        </ul>
+      </aside>
+      <div class="content__main">
+        <section class="domain reveal" id="domain-1"><div class="domain__head"><span class="domain__num">DOMAIN 01 / 18</span><h2>Introduction to Cloud Computing</h2><p>What cloud computing is, where it came from, and why it matters.</p></div><div class="specs"><div class="spec"><div class="spec__term">Cloud computing</div><div class="spec__desc">The delivery of computing resources — servers, storage, databases, networking, software — over the internet, on demand, billed by usage.</div></div>
+<div class="spec"><div class="spec__term">Evolution of computing</div><div class="spec__desc">The path from mainframes to client-server to virtualization to cloud. Each step moved compute further from the user's own hardware and closer to a shared, remote pool.</div></div>
+<div class="spec"><div class="spec__term">On-demand self-service</div><div class="spec__desc">Users provision resources themselves through a portal or API, with no human interaction on the provider's side.</div></div>
+<div class="spec"><div class="spec__term">Broad network access</div><div class="spec__desc">Resources are reachable over the network from any standard device — laptop, phone, or server.</div></div>
+<div class="spec"><div class="spec__term">Resource pooling</div><div class="spec__desc">The provider's hardware is shared across many customers (multi-tenancy), with resources dynamically assigned as needed.</div></div>
+<div class="spec"><div class="spec__term">Rapid elasticity</div><div class="spec__desc">Capacity can expand or shrink quickly — often automatically — to match demand.</div></div>
+<div class="spec"><div class="spec__term">Measured service</div><div class="spec__desc">Usage is metered (CPU-hours, GB stored, requests) and billed accordingly; you pay only for what you use.</div></div>
+<div class="spec"><div class="spec__term">Cloud vs. on-premises</div><div class="spec__desc">With on-prem you buy, house, and maintain your own hardware (capital expense, slow to scale); with cloud you rent capacity (operating expense, scales in minutes).</div></div>
+<div class="spec"><div class="spec__term">Benefits</div><div class="spec__desc">No upfront hardware cost, near-instant global reach, elastic capacity, managed services, and faster time to market.</div></div>
+<div class="spec"><div class="spec__term">Limitations</div><div class="spec__desc">Vendor lock-in, data egress charges, less low-level control, dependence on internet connectivity, compliance and residency constraints, and uncontrolled cost sprawl.</div></div></div></section>
+<section class="domain reveal" id="domain-2"><div class="domain__head"><span class="domain__num">DOMAIN 02 / 18</span><h2>Enabling Technologies</h2><p>Virtualization, containers, and the distributed systems underneath.</p></div><div class="specs"><div class="spec"><div class="spec__term">Virtualization</div><div class="spec__desc">Software that splits one physical machine into multiple isolated virtual machines. It is the foundation of resource pooling.</div></div>
+<div class="spec"><div class="spec__term">Hypervisor</div><div class="spec__desc">The layer that creates and runs virtual machines. A Type 1 (bare-metal) hypervisor runs directly on hardware (ESXi, Xen, KVM); a Type 2 (hosted) hypervisor runs on top of an operating system (VirtualBox, VMware Workstation).</div></div>
+<div class="spec"><div class="spec__term">Virtual machine (VM)</div><div class="spec__desc">A software-emulated computer with its own operating system, kernel, and virtual hardware. It offers strong isolation but a heavier footprint.</div></div>
+<div class="spec"><div class="spec__term">Containers</div><div class="spec__desc">Lightweight packaging of an application plus its dependencies, sharing the host operating system's kernel. They start faster and pack more densely than VMs (Docker).</div></div>
+<div class="spec"><div class="spec__term">Container orchestration</div><div class="spec__desc">The automated deployment, scaling, healing, and networking of containers across a cluster (Kubernetes).</div></div>
+<div class="spec"><div class="spec__term">Distributed systems</div><div class="spec__desc">Multiple machines cooperating as one system — the underlying model for nearly all cloud services.</div></div>
+<div class="spec"><div class="spec__term">Grid, cluster &amp; utility computing</div><div class="spec__desc">The predecessors of cloud: pooling machines for large jobs (grid and cluster) and billing compute like a utility (utility computing).</div></div>
+<div class="spec"><div class="spec__term">Web services &amp; REST APIs</div><div class="spec__desc">The standardized HTTP interfaces through which every cloud resource is created, queried, and destroyed programmatically.</div></div>
+<div class="spec"><div class="spec__term">Service-Oriented Architecture (SOA)</div><div class="spec__desc">A design style of composing systems from loosely coupled, independently deployable services — the conceptual ancestor of microservices.</div></div></div></section>
+<section class="domain reveal" id="domain-3"><div class="domain__head"><span class="domain__num">DOMAIN 03 / 18</span><h2>Service Models</h2><p>IaaS, PaaS, SaaS, serverless, and who is responsible for what.</p></div><div class="specs"><div class="spec"><div class="spec__term">IaaS — Infrastructure as a Service</div><div class="spec__desc">The provider supplies raw compute, storage, and networking, while you manage the operating system, runtime, and applications. Examples: AWS EC2, Azure VMs, Google Compute Engine.</div></div>
+<div class="spec"><div class="spec__term">PaaS — Platform as a Service</div><div class="spec__desc">The provider manages the operating system, runtime, and scaling, while you supply only application code and data. Examples: Heroku, Google App Engine, AWS Elastic Beanstalk.</div></div>
+<div class="spec"><div class="spec__term">SaaS — Software as a Service</div><div class="spec__desc">Fully managed applications consumed over the web, where you manage only your data and configuration. Examples: Gmail, Salesforce, Microsoft 365.</div></div>
+<div class="spec"><div class="spec__term">FaaS / Serverless</div><div class="spec__desc">You deploy individual functions that run on demand, and the provider handles servers, scaling, and idle capacity. You are billed per invocation and runtime. Examples: AWS Lambda, Azure Functions.</div></div>
+<div class="spec"><div class="spec__term">XaaS — Anything as a Service</div><div class="spec__desc">An umbrella term for the growing catalog of cloud-delivered offerings: databases (DBaaS), containers (CaaS), desktops or data (DaaS), storage (STaaS), and so on.</div></div>
+<div class="spec"><div class="spec__term">Shared Responsibility Model</div><div class="spec__desc">The split of security duties: the provider secures the cloud (hardware, facilities, hypervisor), and you secure what you put in it (data, access, configuration). The higher up the stack you go, from IaaS to SaaS, the less falls on you.</div></div></div></section>
+<section class="domain reveal" id="domain-4"><div class="domain__head"><span class="domain__num">DOMAIN 04 / 18</span><h2>Deployment Models</h2><p>Public, private, hybrid, community, and multi-cloud.</p></div><div class="specs"><div class="spec"><div class="spec__term">Public cloud</div><div class="spec__desc">Infrastructure owned by a provider and shared across many tenants over the public internet. It is the cheapest and most elastic option, with the least control.</div></div>
+<div class="spec"><div class="spec__term">Private cloud</div><div class="spec__desc">Cloud infrastructure dedicated to one organization, hosted on-premises or by a third party. It offers more control and easier compliance at a higher cost.</div></div>
+<div class="spec"><div class="spec__term">Hybrid cloud</div><div class="spec__desc">A combination of private and public, with workloads and data able to move between them. Common for keeping regulated data private while bursting into public capacity.</div></div>
+<div class="spec"><div class="spec__term">Community cloud</div><div class="spec__desc">Shared infrastructure for organizations with common requirements, such as government agencies or healthcare consortia.</div></div>
+<div class="spec"><div class="spec__term">Multi-cloud</div><div class="spec__desc">The deliberate use of two or more public providers — to avoid lock-in, optimize cost, or meet regional requirements.</div></div>
+<div class="spec"><div class="spec__term">Selection criteria</div><div class="spec__desc">Choosing a model weighs cost, compliance and data residency, latency, existing skills, workload sensitivity, and expected growth.</div></div></div></section>
+<section class="domain reveal" id="domain-5"><div class="domain__head"><span class="domain__num">DOMAIN 05 / 18</span><h2>Cloud Architecture</h2><p>Regions, availability zones, actors, and design principles.</p></div><div class="specs"><div class="spec"><div class="spec__term">Reference architecture</div><div class="spec__desc">A layered model (infrastructure, then platform, then application) plus the actors around it, used as a shared blueprint.</div></div>
+<div class="spec"><div class="spec__term">Cloud actors</div><div class="spec__desc">The participants in the ecosystem: the consumer (uses services), the provider (offers them), the broker (intermediates or bundles them), the carrier (provides connectivity), and the auditor (independently assesses them).</div></div>
+<div class="spec"><div class="spec__term">Front end &amp; back end</div><div class="spec__desc">The front end is the client-side interfaces (browser, app, CLI); the back end is the provider's servers, storage, and services.</div></div>
+<div class="spec"><div class="spec__term">Region</div><div class="spec__desc">A geographic area containing multiple data centers, chosen for latency, cost, and legal residency.</div></div>
+<div class="spec"><div class="spec__term">Availability Zone (AZ)</div><div class="spec__desc">One or more isolated data centers within a region, each with independent power and cooling. Spreading across zones survives a single-facility failure.</div></div>
+<div class="spec"><div class="spec__term">Edge location (PoP)</div><div class="spec__desc">A small site close to users, used by CDNs and edge services to cut latency.</div></div>
+<div class="spec"><div class="spec__term">Design for failure</div><div class="spec__desc">The principle of assuming every component will fail and building in redundancy, retries, timeouts, and health checks from the start.</div></div>
+<div class="spec"><div class="spec__term">Loose coupling</div><div class="spec__desc">Components interact through well-defined interfaces or queues, so one can fail or change without breaking the others.</div></div>
+<div class="spec"><div class="spec__term">Statelessness</div><div class="spec__desc">Servers keep no client session data locally, so any request can go to any instance — a prerequisite for horizontal scaling.</div></div></div></section>
+<section class="domain reveal" id="domain-6"><div class="domain__head"><span class="domain__num">DOMAIN 06 / 18</span><h2>Compute</h2><p>Instances, images, scaling strategies, and serverless execution.</p></div><div class="specs"><div class="spec"><div class="spec__term">Virtual machine instance</div><div class="spec__desc">A rented virtual server, sized by vCPU, RAM, and storage.</div></div>
+<div class="spec"><div class="spec__term">Instance types / families</div><div class="spec__desc">Preset hardware profiles tuned for a purpose: general-purpose, compute-optimized, memory-optimized, storage-optimized, and GPU/accelerated.</div></div>
+<div class="spec"><div class="spec__term">Machine image</div><div class="spec__desc">A snapshot template (operating system plus preinstalled software) used to launch identical instances, such as an AMI.</div></div>
+<div class="spec"><div class="spec__term">Vertical scaling (scale up)</div><div class="spec__desc">Moving to a bigger instance with more CPU and RAM. It is simple but has a hard ceiling and usually requires a restart.</div></div>
+<div class="spec"><div class="spec__term">Horizontal scaling (scale out)</div><div class="spec__desc">Adding more instances behind a load balancer. It is effectively unlimited but requires stateless design.</div></div>
+<div class="spec"><div class="spec__term">Auto-scaling</div><div class="spec__desc">Automatically adding or removing instances based on metrics (CPU, queue depth) or a schedule.</div></div>
+<div class="spec"><div class="spec__term">Load balancing</div><div class="spec__desc">Distributing incoming traffic across healthy instances and removing failed ones from rotation.</div></div>
+<div class="spec"><div class="spec__term">Elasticity vs. scalability</div><div class="spec__desc">Elasticity is the automatic short-term flex up and down with demand; scalability is the system's ability to grow to handle much larger loads over time.</div></div>
+<div class="spec"><div class="spec__term">Serverless compute</div><div class="spec__desc">No instances to manage at all: code runs in response to events and scales to zero when idle.</div></div></div></section>
+<section class="domain reveal" id="domain-7"><div class="domain__head"><span class="domain__num">DOMAIN 07 / 18</span><h2>Storage</h2><p>Object, block, and file storage — plus durability and consistency.</p></div><div class="specs"><div class="spec"><div class="spec__term">Object storage</div><div class="spec__desc">Flat storage of files ("objects") with metadata, accessed over an HTTP API. Cheap, effectively infinite, and ideal for media, backups, and logs. Amazon S3 is the classic example.</div></div>
+<div class="spec"><div class="spec__term">Block storage</div><div class="spec__desc">Raw virtual disks attached to a single instance and formatted with a filesystem. Low latency; used for operating-system disks and databases. Amazon EBS is an example.</div></div>
+<div class="spec"><div class="spec__term">File storage</div><div class="spec__desc">A shared network filesystem (NFS or SMB) mountable by many instances at once. Amazon EFS is an example.</div></div>
+<div class="spec"><div class="spec__term">Storage classes / tiering</div><div class="spec__desc">Price-versus-access tradeoffs: hot (frequent access, costly), cool (infrequent), and archive (cheapest, with retrieval taking minutes to hours).</div></div>
+<div class="spec"><div class="spec__term">Lifecycle policies</div><div class="spec__desc">Rules that automatically move or delete data as it ages, for example shifting it from hot to archive after 90 days.</div></div>
+<div class="spec"><div class="spec__term">Durability</div><div class="spec__desc">The probability that data is never lost, achieved by replicating it across devices and zones (often quoted as "eleven nines").</div></div>
+<div class="spec"><div class="spec__term">Availability</div><div class="spec__desc">The probability that data is retrievable right now — a separate guarantee from durability.</div></div>
+<div class="spec"><div class="spec__term">Snapshots &amp; backups</div><div class="spec__desc">Point-in-time copies of volumes or databases used for recovery and cloning.</div></div>
+<div class="spec"><div class="spec__term">Consistency models</div><div class="spec__desc">Strong consistency means every read returns the latest write; eventual consistency means replicas converge over time and a read may briefly be stale.</div></div>
+<div class="spec"><div class="spec__term">CAP theorem</div><div class="spec__desc">In a distributed system experiencing a network partition, you must choose between consistency and availability — you cannot have all three simultaneously.</div></div></div></section>
+<section class="domain reveal" id="domain-8"><div class="domain__head"><span class="domain__num">DOMAIN 08 / 18</span><h2>Networking</h2><p>Virtual networks, load balancers, DNS, CDNs, and egress cost.</p></div><div class="specs"><div class="spec"><div class="spec__term">Virtual Private Cloud (VPC)</div><div class="spec__desc">Your own logically isolated network inside the provider's cloud, with a private IP range you control.</div></div>
+<div class="spec"><div class="spec__term">Subnet</div><div class="spec__desc">A subdivision of a VPC. Public subnets have a route to the internet; private subnets do not.</div></div>
+<div class="spec"><div class="spec__term">Route table</div><div class="spec__desc">The set of rules that decide where network traffic from a subnet is sent.</div></div>
+<div class="spec"><div class="spec__term">Internet &amp; NAT gateways</div><div class="spec__desc">An internet gateway grants inbound and outbound internet access; a NAT gateway lets private instances reach out without being reachable from outside.</div></div>
+<div class="spec"><div class="spec__term">Load balancer</div><div class="spec__desc">Distributes traffic across targets and operates either at Layer 4 (TCP) or Layer 7 (HTTP, with routing rules).</div></div>
+<div class="spec"><div class="spec__term">DNS</div><div class="spec__desc">Maps domain names to IP addresses; cloud DNS services also handle health-based and geographic routing. Route 53 is an example.</div></div>
+<div class="spec"><div class="spec__term">CDN — Content Delivery Network</div><div class="spec__desc">Caches content at edge locations near users to cut latency and origin load. CloudFront is an example.</div></div>
+<div class="spec"><div class="spec__term">VPN &amp; Direct Connect</div><div class="spec__desc">A VPN is an encrypted tunnel over the internet; Direct Connect (or ExpressRoute) is a dedicated private circuit linking on-premises to the cloud.</div></div>
+<div class="spec"><div class="spec__term">Peering</div><div class="spec__desc">A private connection between two VPCs (or two networks) so they can communicate without traversing the internet.</div></div>
+<div class="spec"><div class="spec__term">Security group</div><div class="spec__desc">A stateful virtual firewall attached to an instance, supporting allow-rules only.</div></div>
+<div class="spec"><div class="spec__term">Network ACL</div><div class="spec__desc">A stateless firewall at the subnet boundary, supporting both allow and deny rules.</div></div>
+<div class="spec"><div class="spec__term">Bandwidth, latency &amp; throughput</div><div class="spec__desc">Bandwidth is the maximum capacity, latency is the delay per request, and throughput is the data actually moved per second.</div></div>
+<div class="spec"><div class="spec__term">Data egress cost</div><div class="spec__desc">The charge for data leaving the provider's network. Inbound is usually free, but outbound is a major — and often overlooked — cost driver.</div></div></div></section>
+<section class="domain reveal" id="domain-9"><div class="domain__head"><span class="domain__num">DOMAIN 09 / 18</span><h2>Databases in the Cloud</h2><p>Relational, the four NoSQL families, warehouses, and lakes.</p></div><div class="specs"><div class="spec"><div class="spec__term">Managed relational database</div><div class="spec__desc">A hosted RDBMS (MySQL, PostgreSQL, SQL Server) where the provider handles patching, backups, and failover. Amazon RDS is an example.</div></div>
+<div class="spec"><div class="spec__term">NoSQL — key-value</div><div class="spec__desc">Stores that handle simple key-to-value lookups at massive scale and very low latency. DynamoDB and Redis are examples.</div></div>
+<div class="spec"><div class="spec__term">NoSQL — document</div><div class="spec__desc">Stores that hold semi-structured, JSON-like documents with flexible schemas. MongoDB and Cosmos DB are examples.</div></div>
+<div class="spec"><div class="spec__term">NoSQL — column-family</div><div class="spec__desc">Wide-column stores optimized for huge volumes and fast writes. Cassandra and HBase are examples.</div></div>
+<div class="spec"><div class="spec__term">NoSQL — graph</div><div class="spec__desc">Stores that hold nodes and relationships and are efficient for connected data such as social graphs and fraud rings. Neptune is an example.</div></div>
+<div class="spec"><div class="spec__term">Data warehouse</div><div class="spec__desc">An analytics-optimized store for structured data, using columnar formats and massively parallel queries. Redshift, BigQuery, and Snowflake are examples.</div></div>
+<div class="spec"><div class="spec__term">Data lake</div><div class="spec__desc">A central repository holding raw data of any format, structured and unstructured, usually on object storage, with schema applied at read time.</div></div>
+<div class="spec"><div class="spec__term">Caching layer</div><div class="spec__desc">An in-memory store (Redis, Memcached) placed in front of a database to serve hot data in microseconds and reduce load.</div></div>
+<div class="spec"><div class="spec__term">Read replica</div><div class="spec__desc">A read-only copy of a database that offloads query traffic from the primary.</div></div>
+<div class="spec"><div class="spec__term">Sharding / partitioning</div><div class="spec__desc">Splitting data horizontally across nodes so each holds a subset — the standard way to scale writes.</div></div>
+<div class="spec"><div class="spec__term">Replication</div><div class="spec__desc">Copying data to other nodes or regions for availability, durability, and low-latency local reads.</div></div></div></section>
+<section class="domain reveal" id="domain-10"><div class="domain__head"><span class="domain__num">DOMAIN 10 / 18</span><h2>Cloud Security</h2><p>Identity, encryption, common threats, and compliance frameworks.</p></div><div class="specs"><div class="spec"><div class="spec__term">IAM — Identity &amp; Access Management</div><div class="spec__desc">The system defining who can do what to which resource. It is built from users, groups, roles, and policies.</div></div>
+<div class="spec"><div class="spec__term">Role</div><div class="spec__desc">A set of permissions that can be assumed temporarily by a user or a service — the preferred alternative to long-lived credentials.</div></div>
+<div class="spec"><div class="spec__term">Policy</div><div class="spec__desc">A document (usually JSON) that explicitly allows or denies specific actions on specific resources.</div></div>
+<div class="spec"><div class="spec__term">Principle of least privilege</div><div class="spec__desc">Granting only the minimum permissions needed for a task, and nothing more.</div></div>
+<div class="spec"><div class="spec__term">Authentication vs. authorization</div><div class="spec__desc">Authentication is proving who you are; authorization is determining what you are allowed to do.</div></div>
+<div class="spec"><div class="spec__term">MFA — Multi-Factor Authentication</div><div class="spec__desc">Requires a second factor, such as an app code or hardware key, in addition to a password.</div></div>
+<div class="spec"><div class="spec__term">SSO &amp; federation</div><div class="spec__desc">Sign in once with a central identity provider — such as a corporate directory — and access many cloud accounts and apps.</div></div>
+<div class="spec"><div class="spec__term">Encryption at rest</div><div class="spec__desc">Data is stored encrypted on disk, so stolen media is unreadable.</div></div>
+<div class="spec"><div class="spec__term">Encryption in transit</div><div class="spec__desc">Data is encrypted while moving over the network, using TLS/HTTPS.</div></div>
+<div class="spec"><div class="spec__term">Key management (KMS/HSM)</div><div class="spec__desc">The central creation, storage, rotation, and access-control of encryption keys; hardware security modules provide hardware-backed protection.</div></div>
+<div class="spec"><div class="spec__term">Misconfiguration</div><div class="spec__desc">The single most common cause of cloud breaches — for example, a storage bucket accidentally left public.</div></div>
+<div class="spec"><div class="spec__term">DDoS</div><div class="spec__desc">Flooding a service with traffic to knock it offline, mitigated with scrubbing services and edge protection such as AWS Shield.</div></div>
+<div class="spec"><div class="spec__term">Account hijacking &amp; insider threats</div><div class="spec__desc">Stolen credentials or abuse by authorized users, countered with MFA, least privilege, and audit logging.</div></div>
+<div class="spec"><div class="spec__term">Compliance frameworks</div><div class="spec__desc">Rulesets a workload must satisfy: GDPR (EU privacy), HIPAA (US health data), PCI-DSS (payment cards), ISO 27001 (information-security management), and SOC 2 (controls reporting).</div></div>
+<div class="spec"><div class="spec__term">Data sovereignty / residency</div><div class="spec__desc">The legal requirement that data be stored and processed within specific national borders, which drives region choice.</div></div></div></section>
+<section class="domain reveal" id="domain-11"><div class="domain__head"><span class="domain__num">DOMAIN 11 / 18</span><h2>Virtualization &amp; Resource Management</h2><p>Multi-tenancy, provisioning, scheduling, and quality of service.</p></div><div class="specs"><div class="spec"><div class="spec__term">Multi-tenancy</div><div class="spec__desc">Many customers sharing the same physical hardware while remaining logically isolated from one another.</div></div>
+<div class="spec"><div class="spec__term">Resource pooling</div><div class="spec__desc">Aggregating CPU, memory, and storage into a shared pool that is allocated dynamically on demand.</div></div>
+<div class="spec"><div class="spec__term">Provisioning</div><div class="spec__desc">Allocating and configuring resources for a workload — manually, automatically, or through full self-service.</div></div>
+<div class="spec"><div class="spec__term">Scheduling / workload placement</div><div class="spec__desc">Deciding which physical host runs a given VM or container, balancing utilization, affinity, and isolation.</div></div>
+<div class="spec"><div class="spec__term">Over-provisioning &amp; oversubscription</div><div class="spec__desc">Selling more virtual capacity than physical capacity, on the bet that not all tenants peak at once.</div></div>
+<div class="spec"><div class="spec__term">Live migration</div><div class="spec__desc">Moving a running VM between physical hosts with little or no downtime, used for maintenance and rebalancing.</div></div>
+<div class="spec"><div class="spec__term">QoS — Quality of Service</div><div class="spec__desc">The guarantees or limits on the resources — IOPS, bandwidth, CPU — a tenant receives.</div></div>
+<div class="spec"><div class="spec__term">Noisy neighbor</div><div class="spec__desc">The performance degradation caused by another tenant on shared hardware consuming excessive resources.</div></div></div></section>
+<section class="domain reveal" id="domain-12"><div class="domain__head"><span class="domain__num">DOMAIN 12 / 18</span><h2>Reliability &amp; Availability</h2><p>High availability, disaster recovery, RTO/RPO, and SLAs.</p></div><div class="specs"><div class="spec"><div class="spec__term">High availability (HA)</div><div class="spec__desc">Designing so the service keeps running through component failures, typically via redundancy across zones.</div></div>
+<div class="spec"><div class="spec__term">Fault tolerance</div><div class="spec__desc">A stronger property: the system continues at full capability even when components fail, with no degradation.</div></div>
+<div class="spec"><div class="spec__term">Redundancy</div><div class="spec__desc">Duplicate components — instances, zones, regions — so no single failure takes the system down.</div></div>
+<div class="spec"><div class="spec__term">Single point of failure (SPOF)</div><div class="spec__desc">Any component whose failure alone brings down the whole system; eliminating it is the point of HA design.</div></div>
+<div class="spec"><div class="spec__term">Disaster recovery (DR)</div><div class="spec__desc">The plan and tooling to restore service after a major outage. Strategies range from backup and restore, to pilot light, to warm standby, to multi-site active/active, with increasing cost and decreasing downtime.</div></div>
+<div class="spec"><div class="spec__term">RTO — Recovery Time Objective</div><div class="spec__desc">The maximum acceptable time to restore service after an outage.</div></div>
+<div class="spec"><div class="spec__term">RPO — Recovery Point Objective</div><div class="spec__desc">The maximum acceptable amount of data loss, measured in time — for example, "no more than five minutes of data."</div></div>
+<div class="spec"><div class="spec__term">SLA, SLO &amp; SLI</div><div class="spec__desc">The SLA is the contractual uptime promise and its penalties, the SLO is the internal target, and the SLI is the actual measured indicator.</div></div>
+<div class="spec"><div class="spec__term">The "nines"</div><div class="spec__desc">Uptime shorthand: 99.9% is roughly 8.8 hours of downtime per year, 99.99% is about 53 minutes per year, and 99.999% is about 5 minutes per year.</div></div></div></section>
+<section class="domain reveal" id="domain-13"><div class="domain__head"><span class="domain__num">DOMAIN 13 / 18</span><h2>Cloud Economics</h2><p>Pricing models, total cost of ownership, and FinOps.</p></div><div class="specs"><div class="spec"><div class="spec__term">CapEx to OpEx</div><div class="spec__desc">Cloud converts big upfront capital purchases into ongoing operational spend that tracks actual usage.</div></div>
+<div class="spec"><div class="spec__term">On-demand pricing</div><div class="spec__desc">Paying by the second or hour with no commitment. It is the most flexible option and the highest unit price.</div></div>
+<div class="spec"><div class="spec__term">Reserved instances / savings plans</div><div class="spec__desc">Committing to one to three years of usage for a large discount, often 40 to 70 percent.</div></div>
+<div class="spec"><div class="spec__term">Spot instances</div><div class="spec__desc">Bidding on spare capacity at a steep discount, accepting that it can be reclaimed with little notice. Suited to fault-tolerant batch jobs.</div></div>
+<div class="spec"><div class="spec__term">Pay-as-you-go</div><div class="spec__desc">The underlying billing philosophy: you are charged for consumption, not capacity.</div></div>
+<div class="spec"><div class="spec__term">TCO — Total Cost of Ownership</div><div class="spec__desc">The full lifetime cost including hardware, power, cooling, staff, licensing, and downtime, used to compare cloud and on-premises honestly.</div></div>
+<div class="spec"><div class="spec__term">Cost drivers</div><div class="spec__desc">Compute hours, storage volume and class, data egress, requests and API calls, managed-service premiums, and idle or orphaned resources.</div></div>
+<div class="spec"><div class="spec__term">Cost optimization</div><div class="spec__desc">Rightsizing instances, deleting unused resources, tiering storage, using commitments and spot capacity, and turning off dev/test environments outside working hours.</div></div>
+<div class="spec"><div class="spec__term">FinOps</div><div class="spec__desc">The practice of shared cost accountability across engineering, finance, and product, using tagging, budgets, and showback or chargeback.</div></div></div></section>
+<section class="domain reveal" id="domain-14"><div class="domain__head"><span class="domain__num">DOMAIN 14 / 18</span><h2>Cloud Management &amp; Operations</h2><p>Observability, infrastructure as code, and CI/CD.</p></div><div class="specs"><div class="spec"><div class="spec__term">Monitoring</div><div class="spec__desc">Collecting metrics — CPU, latency, error rate — to know how a system is behaving.</div></div>
+<div class="spec"><div class="spec__term">Logging</div><div class="spec__desc">Capturing detailed event records for debugging, security, and audit.</div></div>
+<div class="spec"><div class="spec__term">Alerting</div><div class="spec__desc">Automatically notifying humans or systems when a metric crosses a threshold.</div></div>
+<div class="spec"><div class="spec__term">Observability</div><div class="spec__desc">The ability to understand a system's internal state from its outputs — metrics, logs, and traces together.</div></div>
+<div class="spec"><div class="spec__term">Infrastructure as Code (IaC)</div><div class="spec__desc">Defining infrastructure in version-controlled config files so environments are reproducible and reviewable. Terraform, CloudFormation, and Pulumi are examples.</div></div>
+<div class="spec"><div class="spec__term">Declarative vs. imperative</div><div class="spec__desc">Declarative IaC states the desired end state and lets the tool reach it; imperative scripts state the steps.</div></div>
+<div class="spec"><div class="spec__term">Idempotency</div><div class="spec__desc">Running the same operation repeatedly produces the same result — essential for safe automation.</div></div>
+<div class="spec"><div class="spec__term">CI/CD</div><div class="spec__desc">Continuous Integration (automatic build and test on every commit) and Continuous Delivery or Deployment (automatic release to environments).</div></div>
+<div class="spec"><div class="spec__term">DevOps</div><div class="spec__desc">The culture and practices merging development and operations to ship faster with shared ownership of reliability.</div></div>
+<div class="spec"><div class="spec__term">Configuration management</div><div class="spec__desc">Keeping servers in a known, consistent state with tools such as Ansible, Chef, and Puppet.</div></div>
+<div class="spec"><div class="spec__term">Governance &amp; tagging</div><div class="spec__desc">Applying metadata tags and organizational policies (guardrails) to control cost, ownership, and compliance at scale.</div></div>
+<div class="spec"><div class="spec__term">Immutable infrastructure</div><div class="spec__desc">Never patching a running server but instead replacing it with a new image, eliminating configuration drift.</div></div></div></section>
+<section class="domain reveal" id="domain-15"><div class="domain__head"><span class="domain__num">DOMAIN 15 / 18</span><h2>Migration to the Cloud</h2><p>Assessment, the six R's, and avoiding vendor lock-in.</p></div><div class="specs"><div class="spec"><div class="spec__term">Assessment / discovery</div><div class="spec__desc">Inventorying existing applications, dependencies, and data to decide what moves, and in what order.</div></div>
+<div class="spec"><div class="spec__term">Rehost ("lift and shift")</div><div class="spec__desc">Moving the workload as-is to cloud VMs. The fastest approach with the least benefit.</div></div>
+<div class="spec"><div class="spec__term">Replatform ("lift, tinker &amp; shift")</div><div class="spec__desc">Making small cloud-friendly optimizations — such as swapping a self-managed database for a managed one — without rewriting.</div></div>
+<div class="spec"><div class="spec__term">Refactor / re-architect</div><div class="spec__desc">Redesigning the application for the cloud (microservices, serverless). The highest cost and the highest payoff.</div></div>
+<div class="spec"><div class="spec__term">Repurchase</div><div class="spec__desc">Dropping the app and buying a SaaS equivalent.</div></div>
+<div class="spec"><div class="spec__term">Retire</div><div class="spec__desc">Decommissioning workloads that are no longer needed.</div></div>
+<div class="spec"><div class="spec__term">Retain</div><div class="spec__desc">Deliberately leaving a workload on-premises for now, usually due to compliance or dependency constraints.</div></div>
+<div class="spec"><div class="spec__term">Migration phases</div><div class="spec__desc">From assess, to plan, to migrate (piloting first), to validate, to optimize.</div></div>
+<div class="spec"><div class="spec__term">Vendor lock-in</div><div class="spec__desc">Dependence on one provider's proprietary services, which makes a future move costly. Mitigated with open standards, containers, IaC, and abstraction layers.</div></div>
+<div class="spec"><div class="spec__term">Portability &amp; interoperability</div><div class="spec__desc">Portability is the ability to move workloads between clouds; interoperability is having systems in different clouds work together.</div></div></div></section>
+<section class="domain reveal" id="domain-16"><div class="domain__head"><span class="domain__num">DOMAIN 16 / 18</span><h2>Major Cloud Providers</h2><p>AWS, Azure, GCP, and how their terminology maps.</p></div><div class="specs"><div class="spec"><div class="spec__term">AWS — Amazon Web Services</div><div class="spec__desc">The largest and broadest provider and the earliest to market. Core services include EC2, S3, VPC, RDS, Lambda, and IAM.</div></div>
+<div class="spec"><div class="spec__term">Microsoft Azure</div><div class="spec__desc">Strong in enterprise and hybrid scenarios, integrating tightly with Windows, Active Directory, and Microsoft 365. Core services include Azure VMs, Blob Storage, VNet, Azure SQL, and Functions.</div></div>
+<div class="spec"><div class="spec__term">Google Cloud Platform (GCP)</div><div class="spec__desc">Strengths in data, analytics, and Kubernetes (which Google originated). Core services include Compute Engine, Cloud Storage, VPC, BigQuery, Cloud Functions, and GKE.</div></div>
+<div class="spec"><div class="spec__term">Other providers</div><div class="spec__desc">Oracle Cloud (databases), IBM Cloud (hybrid and enterprise), Alibaba Cloud (Asia-Pacific), and DigitalOcean or Linode for smaller-scale simplicity.</div></div>
+<div class="spec"><div class="spec__term">Terminology mapping</div><div class="spec__desc">The same concepts wear different names: a VM is EC2, an Azure VM, or a Compute Engine instance; an object store is S3, Blob Storage, or Cloud Storage; serverless is Lambda, Azure Functions, or Cloud Functions.</div></div></div></section>
+<section class="domain reveal" id="domain-17"><div class="domain__head"><span class="domain__num">DOMAIN 17 / 18</span><h2>Emerging &amp; Advanced Topics</h2><p>Edge, cloud-native, service mesh, AI/ML, and confidential computing.</p></div><div class="specs"><div class="spec"><div class="spec__term">Edge computing</div><div class="spec__desc">Processing data near where it is generated — in stores, factories, or vehicles — instead of in a distant region, cutting latency and bandwidth.</div></div>
+<div class="spec"><div class="spec__term">Fog computing</div><div class="spec__desc">An intermediate layer between edge devices and the cloud that aggregates and preprocesses data.</div></div>
+<div class="spec"><div class="spec__term">Cloud-native</div><div class="spec__desc">Building specifically for the cloud: containers, microservices, declarative APIs, and automation, designed for elasticity and failure.</div></div>
+<div class="spec"><div class="spec__term">Microservices</div><div class="spec__desc">Structuring an application as small, independently deployable services, each owning one capability.</div></div>
+<div class="spec"><div class="spec__term">API gateway</div><div class="spec__desc">A managed front door for APIs, handling routing, authentication, rate limiting, and throttling.</div></div>
+<div class="spec"><div class="spec__term">Service mesh</div><div class="spec__desc">An infrastructure layer (such as Istio) that handles service-to-service traffic: mutual TLS, retries, routing, and observability.</div></div>
+<div class="spec"><div class="spec__term">Big data &amp; analytics</div><div class="spec__desc">Cloud-scale processing of large datasets (Spark, Hadoop, streaming pipelines) using elastic, on-demand clusters.</div></div>
+<div class="spec"><div class="spec__term">AI/ML services</div><div class="spec__desc">Managed model training, hosting, and prebuilt APIs (vision, speech, language) available without owning GPUs.</div></div>
+<div class="spec"><div class="spec__term">IoT &amp; cloud</div><div class="spec__desc">Ingesting, storing, and analyzing telemetry from large fleets of connected devices.</div></div>
+<div class="spec"><div class="spec__term">Green computing / sustainability</div><div class="spec__desc">Using efficient hardware, high utilization, and renewable-powered regions to reduce the carbon footprint per workload.</div></div>
+<div class="spec"><div class="spec__term">Confidential computing</div><div class="spec__desc">Encrypting data in use by processing it inside hardware-protected enclaves (trusted execution environments).</div></div>
+<div class="spec"><div class="spec__term">Well-Architected principles</div><div class="spec__desc">Provider frameworks that evaluate a workload across pillars: operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability.</div></div></div></section>
+<section class="domain reveal" id="domain-18"><div class="domain__head"><span class="domain__num">DOMAIN 18 / 18</span><h2>Legal, Ethical &amp; Standards</h2><p>Privacy law, contracts, certification, and open standards.</p></div><div class="specs"><div class="spec"><div class="spec__term">Privacy &amp; data protection law</div><div class="spec__desc">Rules governing the collection and processing of personal data (GDPR, CCPA, India's DPDP Act), with real penalties for breaches.</div></div>
+<div class="spec"><div class="spec__term">Cloud contracts &amp; SLAs</div><div class="spec__desc">The agreements defining uptime guarantees, liability, support tiers, and remedies (usually service credits rather than damages).</div></div>
+<div class="spec"><div class="spec__term">Auditing &amp; certification</div><div class="spec__desc">Independent verification that a provider or workload meets a standard (SOC 2, ISO 27001), often required by enterprise customers.</div></div>
+<div class="spec"><div class="spec__term">Right to audit &amp; transparency</div><div class="spec__desc">The customer's contractual ability to review the provider's controls, and the provider's obligation to disclose incidents.</div></div>
+<div class="spec"><div class="spec__term">Open standards &amp; interoperability</div><div class="spec__desc">Common formats and APIs (OCI containers, Kubernetes, S3-compatible APIs) that reduce lock-in and let workloads move.</div></div>
+<div class="spec"><div class="spec__term">Ethical considerations</div><div class="spec__desc">Data ownership, surveillance capability, environmental impact, and equitable access to compute.</div></div></div></section>
+      </div>
+    </div>
+  </section>
+
+  <!-- GLOSSARY -->
+  <section class="glossary section-pad" id="glossary">
+    <div class="wrap">
+      <div class="gloss__head reveal">
+        <p class="eyebrow on-dark">Quick Reference</p>
+        <h2>Glossary of acronyms</h2>
+        <p>The abbreviations that recur across every domain, expanded.</p>
+      </div>
+      <div class="gloss__grid reveal">
+        <dl class="gterm"><dt>AZ</dt><dd>Availability Zone</dd></dl>
+<dl class="gterm"><dt>CDN</dt><dd>Content Delivery Network</dd></dl>
+<dl class="gterm"><dt>CI/CD</dt><dd>Continuous Integration / Delivery</dd></dl>
+<dl class="gterm"><dt>DR</dt><dd>Disaster Recovery</dd></dl>
+<dl class="gterm"><dt>FaaS</dt><dd>Function as a Service</dd></dl>
+<dl class="gterm"><dt>HA</dt><dd>High Availability</dd></dl>
+<dl class="gterm"><dt>IaaS</dt><dd>Infrastructure as a Service</dd></dl>
+<dl class="gterm"><dt>IaC</dt><dd>Infrastructure as Code</dd></dl>
+<dl class="gterm"><dt>IAM</dt><dd>Identity &amp; Access Management</dd></dl>
+<dl class="gterm"><dt>KMS</dt><dd>Key Management Service</dd></dl>
+<dl class="gterm"><dt>MFA</dt><dd>Multi-Factor Authentication</dd></dl>
+<dl class="gterm"><dt>NIST</dt><dd>Nat'l Inst. of Standards &amp; Tech.</dd></dl>
+<dl class="gterm"><dt>PaaS</dt><dd>Platform as a Service</dd></dl>
+<dl class="gterm"><dt>RPO</dt><dd>Recovery Point Objective</dd></dl>
+<dl class="gterm"><dt>RTO</dt><dd>Recovery Time Objective</dd></dl>
+<dl class="gterm"><dt>SaaS</dt><dd>Software as a Service</dd></dl>
+<dl class="gterm"><dt>SLA</dt><dd>Service Level Agreement</dd></dl>
+<dl class="gterm"><dt>SPOF</dt><dd>Single Point of Failure</dd></dl>
+<dl class="gterm"><dt>TCO</dt><dd>Total Cost of Ownership</dd></dl>
+<dl class="gterm"><dt>VPC</dt><dd>Virtual Private Cloud</dd></dl>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#top" aria-label="home">
+          <svg class="brand__mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="6" y="6" width="20" height="14" rx="4" fill="url(#bg1)" opacity="0.9"/><rect x="3" y="11" width="20" height="14" rx="4" fill="none" stroke="#5ee7dc" stroke-width="1.5"/><circle cx="9" cy="18" r="1.4" fill="#5ee7dc"/><circle cx="13" cy="18" r="1.4" fill="#5f76ff"/><defs><linearGradient id="bg1" x1="6" y1="6" x2="26" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#5f76ff"/><stop offset="1" stop-color="#3d5afe"/></linearGradient></defs></svg>
+          <span class="brand__name">CLOUD<b>//</b>FUNDAMENTALS</span>
+        </a>
+        <p class="footer__note">A structured reference to the fundamentals of cloud computing. Concepts are provider-neutral; product names appear as examples only, not endorsements.</p>
+      </div>
+      <div class="footer__side">
+        18 DOMAINS<br>169+ CONCEPTS<br>2026 EDITION
+      </div>
+    </div>
+    <div class="footer__rule"></div>
+    <div class="footer__base">
+      <span>Reference notes &middot; for study &amp; revision</span>
+      <span>Built as a static reference</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// scroll progress
+const bar=document.querySelector('.progress');
+const onScroll=()=>{const h=document.documentElement;const sc=h.scrollTop;const max=h.scrollHeight-h.clientHeight;bar.style.width=(max>0?(sc/max*100):0)+'%';};
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// reveal on scroll
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){
+  const ro=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));}
+
+// scrollspy for rail
+const links=[...document.querySelectorAll('.rail__list a')];
+const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+const spy=new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=map.get(e.target.id); if(a){a.classList.add('active'); a.scrollIntoView({block:'nearest'});}
+    }
+  });
+},{rootMargin:'-45% 0px -50% 0px',threshold:0});
+document.querySelectorAll('.domain').forEach(s=>spy.observe(s));
+</script>
+</body>
+</html>
